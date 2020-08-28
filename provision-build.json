@@ -1,0 +1,68 @@
+{
+   "variables":{
+      "region":"us-east-1",
+      "ami_name":"",
+      "branch":""
+   },
+   "builders":[
+      {
+         "ami_name":"{{user `ami_name`}}",
+         "instance_type":"r4.xlarge",
+         "region":"us-east-1",
+         "source_ami_filter":{
+            "filters":{
+               "virtualization-type":"hvm",
+               "name":"ubuntu/images/*ubuntu-focal-20.04-amd64-server-*",
+               "root-device-type":"ebs"
+            },
+            "owners":[
+               "099720109477"
+            ],
+            "most_recent":true
+         },
+         "ssh_username":"ubuntu",
+         "type":"amazon-ebs",
+         "launch_block_device_mappings":[
+            {
+               "device_name":"/dev/sda1",
+               "delete_on_termination":false,
+               "volume_size":400,
+               "volume_type":"gp2"
+            }
+         ],
+         "ami_block_device_mappings":[
+            {
+               "device_name":"/dev/sda1",
+               "delete_on_termination":false,
+               "volume_type":"gp2"
+            }
+         ]
+      }
+   ],
+   "provisioners":[
+      {
+        "type": "file",
+        "source": "./defaults.cfg",
+        "destination": "/tmp/defaults.cfg"
+      },
+      {
+        "type": "shell",
+        "inline": [
+          "sudo mv /tmp/defaults.cfg /etc/cloud/cloud.cfg.d/defaults.cfg"
+        ]
+      },
+      {
+        "type":"shell",
+        "script":"puppet-install.sh"
+      },
+      {
+        "type":"puppet-masterless",
+        "manifest_file":"manifests/install/",
+	      "module_paths":["modules/"]
+      },
+      {
+        "type":"shell",
+        "script":"build.sh"
+      }
+   ]
+}

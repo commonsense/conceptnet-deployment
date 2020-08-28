@@ -1,0 +1,51 @@
+---
+".gitlab-ci.yml":
+  delete: true
+".travis.yml":
+  global_env:
+    - HONEYCOMB_WRITEKEY="7f3c63a70eecc61d635917de46bea4e6",HONEYCOMB_DATASET="litmus tests"
+  deploy_to_forge:
+    enabled: false
+  user: puppet
+  secure: ''
+  branches:
+  - release
+  use_litmus: true
+  litmus:
+    provision_list:
+    - ---travis_el
+    - travis_deb
+    - travis_el6
+    - travis_el7
+    - travis_el8
+    complex:
+    - collection:
+        puppet_collection:
+        - puppet6
+        provision_list:
+        - travis_ub_6
+    - collection:
+        puppet_collection:
+        - puppet5
+        provision_list:
+        - travis_ub_5
+  simplecov: true
+  notifications:
+    slack:
+      secure: sulU0RHAFNMVQyQnqcyRHLRjL7Zl1Ao7ywuObL/qTsCiIweRsFiHX0BdTrurxobhjgdHQizx9G2IakkvhE120AOlLbCV9Nw45tvyuzdV4HhdPSKtwdWWKXgU4IvP2tSblZ4hCOEG4CuEKPvFtoY8UEW2ODmvvwFlQz+GOYOBYMw=
+appveyor.yml:
+  delete: true
+Gemfile:
+  optional:
+    ":development":
+    - gem: github_changelog_generator
+      git: https://github.com/skywinder/github-changelog-generator
+      ref: 20ee04ba1234e9e83eb2ffb5056e23d641c7a018
+      condition: Gem::Version.new(RUBY_VERSION.dup) >= Gem::Version.new('2.2.2')
+Rakefile:
+  extras:
+    "FastGettext.default_text_domain = 'default-text-domain'"
+  changelog_user: puppetlabs
+spec/spec_helper.rb:
+  mock_with: ":rspec"
+  coverage_report: true

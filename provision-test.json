@@ -1,0 +1,33 @@
+{
+   "variables":{
+      "region":"us-east-1",
+      "ami_owner":"",
+      "ami_name":""
+   },
+   "builders":[
+      {
+         "ami_name":"{{user `ami_name`}}-tested",
+         "instance_type":"r4.xlarge",
+         "region":"us-east-1",
+         "source_ami_filter":{
+            "filters":{
+               "virtualization-type":"hvm",
+               "name":"{{user `ami_name`}}",
+               "root-device-type":"ebs"
+            },
+            "owners":[
+               "{{user `ami_owner`}}"
+            ],
+            "most_recent":true
+         },
+         "ssh_username":"conceptnet",
+         "type":"amazon-ebs"
+      }
+   ],
+   "provisioners":[
+      {
+        "type":"shell",
+        "script":"test.sh"
+      }
+   ]
+}
