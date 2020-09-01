@@ -3,7 +3,8 @@ packer_cache/
 
 # For built boxes
 *.box
+output-virtualbox/
 
 # EBS
 amazon*
-*log*
+log

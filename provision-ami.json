@@ -42,7 +42,7 @@
    "provisioners":[
       {
         "type": "file",
-        "source": "./defaults.cfg",
+        "source": "./ec2-defaults.cfg",
         "destination": "/tmp/defaults.cfg"
       },
       {
@@ -53,7 +53,7 @@
       },
       {
         "type":"shell",
-        "script":"puppet-install.sh"
+        "script":"runtime-scripts/puppet-install.sh"
       },
       {
         "type":"puppet-masterless",
@@ -62,7 +62,11 @@
       },
       {
         "type":"shell",
-        "script":"build.sh"
+        "script":"runtime-scripts/build.sh"
+      },
+      {
+        "type":"shell",
+        "script":"runtime-scripts/test.sh"
       }
    ]
 }

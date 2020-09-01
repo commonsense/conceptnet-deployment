@@ -3,11 +3,8 @@
 This repository facilitates the creation of new ConceptNet AWS [AMIs](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) using [Packer](http://www.packer.io). The tutorial details creating a new EC2 instance for Packer, with appropriate security configurations, installing Packer, and finally using this repository to create ConceptNet AMIs from the [ConceptNet5 Github repository](https://github.com/commonsense/conceptnet5).
 
 ## At a Glance
-### provision-build.sh
+### provision-ami.sh
 Builds the ConceptNet AMI. If the build process is successful a new ConceptNet AMI is created with a high-performance webserver.
-
-### provision-test.sh
-Runs the ConceptNet tests. If the tests are successful a another new ConceptNet AMI is created. It's suggested that you use this AMI instead of the one created by provision-build.sh, and delete the one created by provision-build.sh.
 
 ### modules
 Contains [Puppet](https://puppet.com/docs) dependencies for provisioning the server.
@@ -48,9 +45,9 @@ cd conceptnet-packer
 ```
 
 ### Create the AMI
-To start the process of creating the AMI, run the *provision.sh* script, which sets timeout variables for Packer, and validates the Packer provisioning JSON before building the AMI using it. *[ami_name]* is the name of the AMI which will be created. This should be unique.
+To start the process of creating the AMI, run the *provision-ami.sh* script, which sets timeout variables for Packer, and validates the Packer provisioning JSON before building the AMI using it. *[ami_name]* is the name of the AMI which will be created. This should be unique.
 ```
-./provision-build.sh [ami_name]
+./provision-ami.sh [ami_name]
 ```
 
 This will create a new Ubuntu 18.04 ConceptNet AMI with ConceptNet installed. The build process starts a r4.xlarge instance with 300GB of EBS storage.
@@ -61,7 +58,7 @@ It installs ConceptNet from scratch by downloading and processing necessary depe
 ## Testing
 To test, run the following command, supplying the owner id of the AMI and the AMI name. If the [pytest](https://docs.pytest.org/en/latest/) tests run successfully, a new AMI will be generated which can be used for experiments or further testing.
 
-*[owner_id]* is the [account id](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of the owner of the AMI to be tested. This will be your own account id if you created an AMI with the *provision-build.sh* script.
+*[owner_id]* is the [account id](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of the owner of the AMI to be tested. This will be your own account id if you created an AMI with the *provision-ami.sh* script.
 
 *[ami_name]* is the name of the AMI which will be tested.
 ```
