@@ -20,7 +20,7 @@ For security, this repository will only work within the **us-east-1** [region](h
 1. On the *Create role* page select EC2.
 2. Next on the *Permissions* page, you'll need to attach a policy which grants the EC2 instance (and by extension Packer) access to the EC2 resources it will need to create the AMI.
 
-   Click *Create Policy*. This will open a new dialogue window for creating the policy. In the policy creation page, paste the contents of *packer-policy.json* into the JSON tab. Give the policy a name and create it. The policy provided can create EC2 resources only in the us-east-1 region. To change this, you can modify the value for the *"aws:RequestedRegion"* key. This is to limit the impact should an unauthorized user gain access to the role.  
+   Click *Create Policy*. This will open a new dialogue window for creating the policy. In the policy creation page, paste the contents of *packer-policy.json* into the JSON tab. Give the policy a name and create it. The policy provided can create EC2 resources only in the us-east-1 region. To change this, you can modify the value for the *"aws:RequestedRegion"* key. This is to limit the impact should an unauthorized user gain access to the role.
 
 3. Back in the *Permissions* window of the *IAM role* dialogue, refresh the available policies with the refresh button. Then select the policy you created.
 4. Click through the optional *Add tags* page.
@@ -38,9 +38,9 @@ Packer will run on this instance, and use the associated IAM role to access EC2 
 ### Configure the instance for ConceptNet AMI provisioning
 1. [Connect to the instance via SSH](https://docs.aws.amazon.com/quickstarts/latest/vmlaunch/step-2-connect-to-instance.html), and install Packer using the [provided tutorial](https://www.packer.io/intro/getting-started/install.html).
 
-2. Clone the conceptnet-packer repository to the instance, or upload it via SFTP:
+2. Clone the conceptnet-packer repository to the instance:
 ```
-git clone https://github.int.luminoso.com/Research/conceptnet-packer
+git clone https://github.com/commonsense/conceptnet-packer
 cd conceptnet-packer
 ```
 
@@ -55,7 +55,7 @@ This will create a new Ubuntu 18.04 ConceptNet AMI with ConceptNet installed. Th
 It installs ConceptNet from scratch by downloading and processing necessary dependencies and data. **This takes about 18 hours.** If the build fails and Packer can still connect to the relevant AWS resources, Packer will cleanup the associated EC2 resources. **In certain situations, Packer may not be able to terminate the instance and storage, which will continue to incur costs.**
 
 
-## Testing
+# Testing
 To test, run the following command, supplying the owner id of the AMI and the AMI name. If the [pytest](https://docs.pytest.org/en/latest/) tests run successfully, a new AMI will be generated which can be used for experiments or further testing.
 
 *[owner_id]* is the [account id](https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html) of the owner of the AMI to be tested. This will be your own account id if you created an AMI with the *provision-ami.sh* script.
