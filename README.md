@@ -71,6 +71,36 @@ an EC2 instance, and use Packer to provision a new ConceptNet AMI.
 This repository will only work within the **us-east-1** region.
 
 
+### Creating IAM policies
+
+Within AWS, you need to create an [IAM role][] with an attached [policy][IAM policy].
+
+[IAM role]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#create-iam-role
+[IAM policy]: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_id-based
+
+1. On the *Create role* page select EC2.
+
+2. Next on the *Permissions* page, you'll need to attach a policy which grants
+   the EC2 instance (and by extension Packer) access to the EC2 resources it
+   will need to create the AMI.
+
+   Click *Create Policy*. This will open a new dialogue window for creating the
+   policy. In the policy creation page, paste the contents of
+   `packer-policy.json` into the JSON tab. Give the policy a name and create
+   it. The policy provided can create EC2 resources only in the us-east-1
+   region. To change this, you can modify the value for the
+   `"aws:RequestedRegion"` key. This is to limit the impact should an
+   unauthorized user gain access to the role.
+
+3. Back in the *Permissions* window of the *IAM role* dialogue, refresh the
+   available policies with the refresh button. Then select the policy you
+   created.
+
+4. Click through the optional *Add tags* page.
+
+5. On the *Review* page, give the new IAM role a name and create it.
+
+
 ### Creating the EC2 instance
 
 The next step is to [create an EC2 instance][] that runs Packer.
@@ -102,37 +132,6 @@ AMI.
 6. *Review* and launch the instance.
 
 [create a security group]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html
-
-
-### Creating IAM policies
-
-On the machine that runs Packer, you need to create an [IAM role][] with an
-attached [policy][IAM policy].
-
-[IAM role]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#create-iam-role
-[IAM policy]: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#policies_id-based
-
-1. On the *Create role* page select EC2.
-
-2. Next on the *Permissions* page, you'll need to attach a policy which grants
-   the EC2 instance (and by extension Packer) access to the EC2 resources it
-   will need to create the AMI.
-
-   Click *Create Policy*. This will open a new dialogue window for creating the
-   policy. In the policy creation page, paste the contents of
-   `packer-policy.json` into the JSON tab. Give the policy a name and create
-   it. The policy provided can create EC2 resources only in the us-east-1
-   region. To change this, you can modify the value for the
-   `"aws:RequestedRegion"` key. This is to limit the impact should an
-   unauthorized user gain access to the role.
-
-3. Back in the *Permissions* window of the *IAM role* dialogue, refresh the
-   available policies with the refresh button. Then select the policy you
-   created.
-
-4. Click through the optional *Add tags* page.
-
-5. On the *Review* page, give the new IAM role a name and create it.
 
 
 ### Configure the instance for ConceptNet AMI provisioning
