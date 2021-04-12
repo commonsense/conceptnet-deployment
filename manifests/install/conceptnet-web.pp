@@ -5,6 +5,10 @@ package { 'nginx':
   ensure  => 'latest',
 }
 
+package { 'uwsgi':
+  ensure  => 'latest',
+}
+
 # Install the ConceptNet web package from source
 python::pip { 'conceptnet_web':
   virtualenv => '/home/conceptnet/env',
@@ -108,7 +112,7 @@ exec { 'systemctl enable conceptnet':
   path        => ['/bin'],
   refreshonly => true,
   subscribe   => File['/etc/systemd/system/conceptnet.service'],
-  require     => File['/etc/systemd/system/conceptnet.service'],
+  require     => [File['/etc/systemd/system/conceptnet.service'], Package['uwsgi']],
 }
 
 exec { 'systemctl restart conceptnet':
@@ -119,7 +123,7 @@ exec { 'systemctl restart conceptnet':
                   File['/home/conceptnet/uwsgi/apps/conceptnet-web.ini'],
                   File['/home/conceptnet/uwsgi/apps/conceptnet-api.ini'],
                   Python::Pip['conceptnet_web'],
-                  Python::Pip['uwsgi']],
+                  Package['uwsgi']],
 }
 
 
