@@ -71,6 +71,39 @@ an EC2 instance, and use Packer to provision a new ConceptNet AMI.
 This repository will only work within the **us-east-1** region.
 
 
+### Creating the EC2 instance
+
+The next step is to [create an EC2 instance][] that runs Packer.
+
+[Create an EC2 instance]: https://docs.aws.amazon.com/quickstarts/latest/vmlaunch/step-1-launch-instance.html
+
+Packer will run on this instance, and use the associated IAM role to access EC2
+resources to create and provision a ConceptNet instance from which to create an
+AMI.
+
+1. On the *Choose an Amazon Machine Image* page, choose a common Linux
+   distribution which supports Packer (for example, Ubuntu 20.04).
+
+2. Next on the *Choose an Instance Type* page, select an instance type. This
+   can be an inexpensive low-resource instance (for example a t2.micro), as
+   it's only going to make EC2 API calls.
+
+3. Click though to the *Configure Instance Details* page, and for *IAM role*
+   select the IAM role you created.
+
+4. Make sure the keys you use to connect to the instance are kept secret, as
+   anyone with access to the instance can create EC2 resources on your account.
+
+5. For additional security, on the *Configure Security Group*, [create a
+   security group][]
+   which allows only known IP addresses to connect to the instance. The details
+   of security group creation are outside the scope of this tutorial.
+
+6. *Review* and launch the instance.
+
+[create a security group]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html
+
+
 ### Creating IAM policies
 
 On the machine that runs Packer, you need to create an [IAM role][] with an
@@ -100,39 +133,6 @@ attached [policy][IAM policy].
 4. Click through the optional *Add tags* page.
 
 5. On the *Review* page, give the new IAM role a name and create it.
-
-
-### Creating the EC2 instance
-
-The next step is to [create an EC2 instance][] that runs Packer.
-
-[Create an EC2 instance][]: https://docs.aws.amazon.com/quickstarts/latest/vmlaunch/step-1-launch-instance.html
-
-Packer will run on this instance, and use the associated IAM role to access EC2
-resources to create and provision a ConceptNet instance from which to create an
-AMI.
-
-1. On the *Choose an Amazon Machine Image* page, choose a common Linux
-   distribution which supports Packer (for example, Ubuntu 20.04).
-
-2. Next on the *Choose an Instance Type* page, select an instance type. This
-   can be an inexpensive low-resource instance (for example a t2.micro), as
-   it's only going to make EC2 API calls.
-
-3. Click though to the *Configure Instance Details* page, and for *IAM role*
-   select the IAM role you created.
-
-4. Make sure the keys you use to connect to the instance are kept secret, as
-   anyone with access to the instance can create EC2 resources on your account.
-
-5. For additional security, on the *Configure Security Group*, [create a
-   security group][]
-   which allows only known IP addresses to connect to the instance. The details
-   of security group creation are outside the scope of this tutorial.
-
-6. *Review* and launch the instance.
-
-[create a security group]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html
 
 
 ### Configure the instance for ConceptNet AMI provisioning
